@@ -27,7 +27,7 @@
           <button
             @click="uploadImage"
             :disabled="!selectedFile"
-            class="btn btn-success w-100 fw-semibold py-2 mb-3"
+            class="btn btn-success w-100 fw-semibold py-2 mb-3 cursor-pointer"
           >
             Tahmin Et
           </button>
@@ -37,7 +37,7 @@
             class="alert mt-auto"
             :class="result ? 'alert-success' : 'alert-secondary text-muted'"
           >
-            <span v-if="result">Tahmin: {{ result }}</span>
+            <span v-if="result == 'long_sleeve'">Tahmin: Uzun Kollu Tişört</span><span v-else-if="result == 'short_sleeve'">Tahmin: Kısa Kollu Tişört</span>
             <span v-else>Henüz bir tahmin yapılmadı</span>
           </div>
         </div>
