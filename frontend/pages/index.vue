@@ -1,101 +1,77 @@
-<!-- <template>
-    <div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
-      <h1 class="text-3xl font-bold mb-4">T-Shirt Sınıflandırıcı</h1>
-  
-      <div
-        class="w-full max-w-md p-6 bg-white rounded-2xl shadow-md flex flex-col items-center gap-4"
-      >
-        <input type="file" @change="handleFileUpload" class="block w-full text-sm text-gray-700" />
-  
-        <div v-if="imageUrl" class="mt-4 w-full">
-          <img :src="imageUrl" alt="Yüklenen Görsel" class="rounded-xl shadow w-full" />
+<template>
+  <div class="min-h-screen bg-gradient-to-b from-blue-100 to-white flex flex-col items-center py-10 px-4">
+    <!-- Başlık -->
+    <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-800 mb-10">
+      Hadi tişörtün <span class="text-red-500">Kısa kollu mu</span> <span class="text-green-600">Uzun Kollu mu</span> olduğunu bulalım!
+    </h1>
+
+    <!-- Yükleme & Tahmin Kutusu -->
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl flex flex-col md:flex-row p-6 gap-6 items-start">
+      <!-- Sol: Görsel Önizleme ve Dosya Yükleme -->
+      <div class="flex-1">
+        <!-- Dosya Yükleme Alanı -->
+        <label class="block border-2 border-dashed border-blue-300 p-6 rounded-xl text-center cursor-pointer hover:border-blue-500 transition">
+          <input type="file" @change="onFileChange" accept="image/*" class="hidden" />
+          <span class="text-blue-600 font-medium">Bir fotoğraf seçmek için tıkla</span>
+        </label>
+
+        <!-- Görsel Önizleme -->
+        <div v-if="imageUrl" class="mt-4 rounded-xl overflow-hidden shadow border">
+          <img :src="imageUrl" alt="Yüklenen görsel" class="w-full h-auto object-contain" />
         </div>
-  
+      </div>
+
+      <!-- Sağ: Tahmin & Sonuç -->
+      <div class="flex flex-col justify-between flex-1 h-full w-full">
+        <!-- Tahmin Butonu -->
         <button
-          :disabled="!image"
-          @click="sendToAPI"
-          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          @click="uploadImage"
+          :disabled="!selectedFile"
+          class="bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:scale-105 transition disabled:opacity-50 self-end"
         >
           Tahmin Et
         </button>
-  
-        <div v-if="result" class="mt-4 text-center">
-          <p class="text-lg font-semibold">
-            Sonuç: <span class="text-blue-600">{{ result.label }}</span>
-          </p>
-          <p class="text-sm text-gray-500">Güven: {{ result.confidence }}%</p>
+
+        <!-- Sonuç -->
+        <div
+          class="mt-6 border border-green-300 bg-green-50 text-green-800 px-4 py-3 rounded-xl shadow min-h-[60px] text-center text-lg font-medium"
+        >
+          <span v-if="result">Tahmin: {{ result }}</span>
+          <span v-else class="text-gray-400">Henüz bir tahmin yapılmadı</span>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  import axios from 'axios'
-  
-  const image = ref(null)
-  const imageUrl = ref(null)
-  const result = ref(null)
-  
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0]
-    image.value = file
-    imageUrl.value = URL.createObjectURL(file)
-  }
-  
-  const sendToAPI = async () => {
-    const formData = new FormData()
-    formData.append('file', image.value)
-  
-    const response = await axios.post('http://localhost:8000/predict', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-  
-    result.value = response.data
-  }
-  </script>
-   -->
+  </div>
+</template>
 
-   <template>
-    <div class="p-4 max-w-md mx-auto">
-      <h1 class="text-xl font-bold mb-4">Tişört Sınıflandırma</h1>
-  
-      <input type="file" @change="onFileChange" accept="image/*" class="mb-4" />
-      
-      <button @click="uploadImage" class="bg-blue-500 text-white px-4 py-2 rounded">
-        Tahmin Et
-      </button>
-  
-      <p v-if="result" class="mt-4">Tahmin: {{ result }}</p>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  import axios from 'axios'
-  
-  const selectedFile = ref(null)
-  const result = ref(null)
-  
-  const onFileChange = (event) => {
-    selectedFile.value = event.target.files[0]
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const selectedFile = ref(null)
+const imageUrl = ref(null)
+const result = ref(null)
+
+const onFileChange = (event) => {
+  const file = event.target.files[0]
+  selectedFile.value = file
+  imageUrl.value = URL.createObjectURL(file)
+}
+
+const uploadImage = async () => {
+  if (!selectedFile.value) return
+
+  const formData = new FormData()
+  formData.append('file', selectedFile.value)
+
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/predict', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    result.value = response.data.prediction
+  } catch (error) {
+    console.error(error)
+    result.value = 'Bir hata oluştu.'
   }
-  
-  const uploadImage = async () => {
-    if (!selectedFile.value) return
-  
-    const formData = new FormData()
-    formData.append('file', selectedFile.value)
-  
-    try {
-      const response = await axios.post('http://127.0.0.1:8000/predict/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      result.value = response.data.prediction
-    } catch (error) {
-      result.value = 'Hata oluştu.'
-      console.error(error)
-    }
-  }
-  </script>
-  
+}
+</script>
