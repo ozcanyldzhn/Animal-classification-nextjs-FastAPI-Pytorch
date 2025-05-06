@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
       <h1 class="text-3xl font-bold mb-4">T-Shirt Sınıflandırıcı</h1>
   
@@ -52,6 +52,50 @@
     })
   
     result.value = response.data
+  }
+  </script>
+   -->
+
+   <template>
+    <div class="p-4 max-w-md mx-auto">
+      <h1 class="text-xl font-bold mb-4">Tişört Sınıflandırma</h1>
+  
+      <input type="file" @change="onFileChange" accept="image/*" class="mb-4" />
+      
+      <button @click="uploadImage" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Tahmin Et
+      </button>
+  
+      <p v-if="result" class="mt-4">Tahmin: {{ result }}</p>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref } from 'vue'
+  import axios from 'axios'
+  
+  const selectedFile = ref(null)
+  const result = ref(null)
+  
+  const onFileChange = (event) => {
+    selectedFile.value = event.target.files[0]
+  }
+  
+  const uploadImage = async () => {
+    if (!selectedFile.value) return
+  
+    const formData = new FormData()
+    formData.append('file', selectedFile.value)
+  
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/predict/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      result.value = response.data.prediction
+    } catch (error) {
+      result.value = 'Hata oluştu.'
+      console.error(error)
+    }
   }
   </script>
   
