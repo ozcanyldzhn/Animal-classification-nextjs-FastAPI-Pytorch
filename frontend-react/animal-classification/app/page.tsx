@@ -112,7 +112,7 @@ export default function AnimalClassification() {
     formData.append("file", selectedFile)
 
     try {
-      const response = await axios.post("https://animal-api.onrender.com/predict", formData, {
+      const response = await axios.post("https://animal-api-o3qa.onrender.com/predict", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       setPredictions(response.data.predictions)
