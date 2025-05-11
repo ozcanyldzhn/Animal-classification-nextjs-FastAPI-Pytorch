@@ -55,10 +55,15 @@ async def predict(file: UploadFile = File(...)):
 
     # Tahmin yap
     with torch.no_grad():
-        with torch.amp.autocast(device_type='cuda', dtype=torch.float16):
-            outputs = model(image)
-            probabilities = torch.nn.functional.softmax(outputs[0], dim=0)
-            top3_prob, top3_indices = torch.topk(probabilities, 3)
+        if torch.cuda.is_available():
+            with torch.amp.autocast(device_type='cuda', dtype=torch.float16):
+                outputs = model(image)  # Bu satır burada olmalı
+        else:
+            outputs = model(image)  # Bu satır burada olmalı
+
+        probabilities = torch.nn.functional.softmax(outputs[0], dim=0)
+        top3_prob, top3_indices = torch.topk(probabilities, 3)
+
     
     # Sonuçları hazırla
     results = []
