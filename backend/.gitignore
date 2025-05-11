@@ -101,3 +101,6 @@ docs/_build/
 .cache/
 .pytest_cache/
 animals/
+dogs_cats/
+simplify_dataset.py
+split_dogs_cats.py
