@@ -5,3 +5,98 @@ fashion_dataset_organized/
 *.png
 *.jpeg
 *.gif
+cloth_dataset/
+__pycache__/
+# Bytecode dosyaları
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# IDE/editor konfigürasyon dosyaları
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS dosyaları
+.DS_Store
+Thumbs.db
+
+# Log dosyaları
+*.log
+
+# Test çıktıları
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# PyInstaller
+dist/
+build/
+*.spec
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# Pytype
+.pytype/
+
+# Profiling
+.prof
+
+# pip cache
+pip-wheel-metadata/
+*.egg-info/
+*.egg
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints
+
+# dotenv
+.env
+.env.*
+
+# SQLite veya lokal veritabanı dosyaları
+*.sqlite3
+*.db
+
+# Anaconda
+*.conda
+*.ipynb
+
+# Unit test cache
+__pypackages__/
+
+# Mac OS özel
+.AppleDouble
+.LSOverride
+
+# Windows özel
+desktop.ini
+
+# VSCode debug config
+*.code-workspace
+.vscode/
+
+# Eğer dokümantasyon Sphinx ile oluşturuluyorsa
+docs/_build/
+
+# Pytest
+.cache/
+.pytest_cache/
