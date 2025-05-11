@@ -100,3 +100,4 @@ docs/_build/
 # Pytest
 .cache/
 .pytest_cache/
+animals/
