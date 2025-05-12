@@ -104,3 +104,5 @@ animals/
 dogs_cats/
 simplify_dataset.py
 split_dogs_cats.py
+data_analysis.py
+utils/
